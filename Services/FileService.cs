@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using HomeWork.Services.Abstractions;
 
@@ -10,7 +11,7 @@ namespace HomeWork.Services
             return File.ReadAllText(path);
         }
 
-        public StreamWriter Create(string path)
+        public IDisposable Create(string path)
         {
             var fileInfo = new FileInfo(path);
 
@@ -22,16 +23,20 @@ namespace HomeWork.Services
             return new StreamWriter(path, true, System.Text.Encoding.Default);
         }
 
-        public void Write(StreamWriter streamWriter, string data)
+        public void Write(IDisposable streamWriter, string data)
         {
-            streamWriter.WriteLine(data);
-            streamWriter.Flush();
+            var sWriter = streamWriter as StreamWriter;
+
+            sWriter?.WriteLine(data);
+            sWriter?.Flush();
         }
 
-        public void Close(StreamWriter streamWriter)
+        public void Close(IDisposable streamWriter)
         {
-            streamWriter.Close();
-            streamWriter.Dispose();
+            var sWriter = streamWriter as StreamWriter;
+
+            sWriter?.Close();
+            sWriter?.Dispose();
         }
     }
 }

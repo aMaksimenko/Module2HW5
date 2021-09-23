@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using HomeWork.Models;
 using HomeWork.Models.Enums;
 using HomeWork.Providers.Abstractions;
@@ -11,7 +10,7 @@ namespace HomeWork.Services
     {
         private readonly IFileService _fileService;
         private readonly LoggerConfig _loggerConfig;
-        private StreamWriter _fileWriter;
+        private IDisposable _fileWriter;
 
         public LoggerService(
             IFileService fileService,
