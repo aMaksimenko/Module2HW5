@@ -10,7 +10,7 @@ namespace HomeWork.Services
             return File.ReadAllText(path);
         }
 
-        public void Create(string path)
+        public StreamWriter Create(string path)
         {
             var fileInfo = new FileInfo(path);
 
@@ -18,6 +18,8 @@ namespace HomeWork.Services
             {
                 fileInfo.Create().Close();
             }
+
+            return new StreamWriter(path, true, System.Text.Encoding.Default);
         }
 
         public void Write(StreamWriter streamWriter, string data)

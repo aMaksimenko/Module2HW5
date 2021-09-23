@@ -11,7 +11,7 @@ namespace HomeWork
         public void Run()
         {
             var serviceProvider = new ServiceCollection()
-                .AddSingleton<IFileService, FileService>()
+                .AddTransient<IFileService, FileService>()
                 .AddSingleton<IConfigProvider, ConfigProvider>()
                 .AddSingleton<ILoggerService, LoggerService>()
                 .AddTransient<Actions>()

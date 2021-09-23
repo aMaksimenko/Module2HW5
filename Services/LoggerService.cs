@@ -11,6 +11,7 @@ namespace HomeWork.Services
     {
         private readonly IFileService _fileService;
         private readonly LoggerConfig _loggerConfig;
+        private StreamWriter _fileWriter;
 
         public LoggerService(
             IFileService fileService,
@@ -22,10 +23,8 @@ namespace HomeWork.Services
 
         ~LoggerService()
         {
-            _fileService.Close(StreamWriter);
+            _fileService.Close(_fileWriter);
         }
-
-        private StreamWriter StreamWriter { get; set; }
 
         public void LogError(string message)
         {
@@ -44,8 +43,7 @@ namespace HomeWork.Services
 
         public void SetOutput(string filePath)
         {
-            _fileService.Create(filePath);
-            StreamWriter = new StreamWriter(filePath, true, System.Text.Encoding.Default);
+            _fileWriter = _fileService.Create(filePath);
         }
 
         private void Log(string message, LogType logType)
@@ -53,12 +51,7 @@ namespace HomeWork.Services
             var logItem = $"{DateTime.UtcNow.ToString(_loggerConfig.TimeFormat)}: {logType.ToString()}: {message}";
 
             Console.WriteLine(logItem);
-            Write(logItem);
-        }
-
-        private void Write(string logItem)
-        {
-            _fileService.Write(StreamWriter, logItem);
+            _fileService.Write(_fileWriter, logItem);
         }
     }
 }
