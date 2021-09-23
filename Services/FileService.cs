@@ -5,20 +5,12 @@ namespace HomeWork.Services
 {
     public class FileService : IFileService
     {
-        ~FileService()
-        {
-            StreamWriter.Close();
-            StreamWriter.Dispose();
-        }
-
-        private StreamWriter StreamWriter { get; set; }
-
         public string Read(string path)
         {
             return File.ReadAllText(path);
         }
 
-        public void SetOutput(string path)
+        public void Create(string path)
         {
             var fileInfo = new FileInfo(path);
 
@@ -26,14 +18,18 @@ namespace HomeWork.Services
             {
                 fileInfo.Create().Close();
             }
-
-            StreamWriter = new StreamWriter(path, true, System.Text.Encoding.Default);
         }
 
-        public void Write(string data)
+        public void Write(StreamWriter streamWriter, string data)
         {
-            StreamWriter.WriteLine(data);
-            StreamWriter.Flush();
+            streamWriter.WriteLine(data);
+            streamWriter.Flush();
+        }
+
+        public void Close(StreamWriter streamWriter)
+        {
+            streamWriter.Close();
+            streamWriter.Dispose();
         }
     }
 }
